@@ -1,5 +1,5 @@
 /*!
- * github-api-base <https://github.com/jonschlinkert/github-api-base>
+ * github-base <https://github.com/jonschlinkert/github-base>
  *
  * Copyright (c) 2015, Jon Schlinkert.
  * Licensed under the MIT License.

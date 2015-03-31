@@ -1,22 +1,22 @@
 {
-  "name": "github-api-base",
+  "name": "github-base",
   "description": "Simple, opinionated node.js interface for creating basic apps with the GitHub API.",
   "version": "0.1.0",
-  "homepage": "https://github.com/jonschlinkert/github-api-base",
+  "homepage": "https://github.com/jonschlinkert/github-base",
   "author": {
     "name": "Jon Schlinkert",
     "url": "https://github.com/jonschlinkert"
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/jonschlinkert/github-api-base.git"
+    "url": "git://github.com/jonschlinkert/github-base.git"
   },
   "bugs": {
-    "url": "https://github.com/jonschlinkert/github-api-base/issues"
+    "url": "https://github.com/jonschlinkert/github-base/issues"
   },
   "license": {
     "type": "MIT",
-    "url": "https://github.com/jonschlinkert/github-api-base/blob/master/LICENSE"
+    "url": "https://github.com/jonschlinkert/github-base/blob/master/LICENSE"
   },
   "files": [
     "index.js"
