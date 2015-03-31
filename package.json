@@ -1,7 +1,7 @@
 {
   "name": "github-base",
   "description": "Simple, opinionated node.js interface for creating basic apps with the GitHub API.",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "homepage": "https://github.com/jonschlinkert/github-base",
   "author": {
     "name": "Jon Schlinkert",
