@@ -21,7 +21,7 @@ describe('base', function () {
       cb()
     });
   });
-  it('should return an error message when the url is not found:', function (cb) {
+  it('should get a response from the github api:', function (cb) {
     base('repos/assemble/assemble/contributors', function (err, res) {
       if (err) console.log(err);
       res.should.be.an.array;
