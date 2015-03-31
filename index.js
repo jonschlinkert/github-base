@@ -26,8 +26,7 @@ module.exports = function base(url, params, cb) {
   var id = params.id;
   var secret = params.secret;
   params.headers = {'user-agent': 'node.js'};
-  params.query = params.query || '?page=1&per_page=100';
-  params.url = params.url || (address(url, params.query) + auth(id, secret));
+  params.url = params.url || (address(url) + auth(id, secret));
 
   request(params, function (err, res, body) {
     if (err) return cb(err);
@@ -39,6 +38,6 @@ function auth(id, secret) {
   return id && secret ? ('?client_id=' + id + '&client_secret=' + secret) : '';
 }
 
-function address(url, query) {
-  return 'https://api.github.com/' + url + query;
+function address(url) {
+  return 'https://api.github.com/' + url;
 }
