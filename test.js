@@ -28,13 +28,22 @@ describe('base', function () {
       cb();
     });
   });
-
+  it('should work by passing different endpoint', function(cb) {
+    var opts = {
+      endpoint: 'https://api.github.com/repos/'
+    };
+    base('assemble/assemble/contributors', opts, function (err, res) {
+      if (err) console.log(err);
+      res.should.be.an.array;
+      res[0].should.have.properties(['login', 'id', 'avatar_url', 'gravatar_id']);
+      cb();
+    });
+  });
   it('should throw an error when url is not a string:', function () {
     (function () {
       base();
     }).should.throw('github-api-base expects url to be a string.');
   });
-
   it('should throw an error when no callback is given.', function () {
     (function () {
       base('foo');
