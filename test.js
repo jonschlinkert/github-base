@@ -45,16 +45,16 @@ describe('base', function () {
   it('should throw an error when url is not a string:', function () {
     (function () {
       base();
-    }).should.throw('github-api-base expects url to be a string.');
+    }).should.throw('github-base expects url to be a string.');
   });
 
   it('should throw an error when no callback is given.', function () {
     (function () {
       base('foo');
-    }).should.throw('github-api-base expects callback to be a function.');
+    }).should.throw('github-base expects callback to be a function.');
 
     (function () {
       base('foo', {});
-    }).should.throw('github-api-base expects callback to be a function.');
+    }).should.throw('github-base expects callback to be a function.');
   });
 });
