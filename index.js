@@ -7,11 +7,11 @@
 
 'use strict';
 
-var request = require('request');
+var request = require('simple-get');
 
 module.exports = function base(url, params, cb) {
   if (typeof url !== 'string') {
-    throw new TypeError('github-api-base expects url to be a string.');
+    throw new TypeError('github-base expects url to be a string.');
   }
 
   if (typeof params === 'function') {
@@ -19,7 +19,7 @@ module.exports = function base(url, params, cb) {
   }
 
   if (typeof cb !== 'function') {
-    throw new TypeError('github-api-base expects callback to be a function.');
+    throw new TypeError('github-base expects callback to be a function.');
   }
 
   params = typeof params === 'object' ? params : {};
@@ -46,7 +46,7 @@ module.exports = function base(url, params, cb) {
 
   params.url = url;
 
-  request(params, function (err, res, body) {
+  request.concat(params, function (err, body) {
     if (err) return cb(err);
     cb(null, JSON.parse(body));
   });
