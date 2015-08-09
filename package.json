@@ -1,23 +1,14 @@
 {
   "name": "github-base",
-  "description": "Simple, opinionated node.js interface for creating basic apps with the GitHub API.",
+  "description": "Base methods for creating node.js apps that work with the GitHub API.",
   "version": "0.1.1",
   "homepage": "https://github.com/jonschlinkert/github-base",
-  "author": {
-    "name": "Jon Schlinkert",
-    "url": "https://github.com/jonschlinkert"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git://github.com/jonschlinkert/github-base.git"
-  },
+  "author": "Jon Schlinkert (https://github.com/jonschlinkert)",
+  "repository": "jonschlinkert/github-base",
   "bugs": {
     "url": "https://github.com/jonschlinkert/github-base/issues"
   },
-  "license": {
-    "type": "MIT",
-    "url": "https://github.com/jonschlinkert/github-base/blob/master/LICENSE"
-  },
+  "license": "MIT",
   "files": [
     "index.js"
   ],
@@ -29,14 +20,30 @@
     "test": "mocha"
   },
   "dependencies": {
-    "request": "^2.54.0"
+    "extend-shallow": "^2.0.1",
+    "github-request": "jonschlinkert/github-request"
   },
   "devDependencies": {
     "mocha": "*",
+    "randomatic": "^1.1.0",
     "should": "*"
   },
   "keywords": [
     "api",
-    "github"
-  ]
+    "del",
+    "delete",
+    "get",
+    "github",
+    "paginate",
+    "paginated",
+    "patch",
+    "post",
+    "put",
+    "request"
+  ],
+  "verb": {
+    "related": {
+      "list": "github-contributors"
+    }
+  }
 }
