@@ -74,52 +74,54 @@ describe('GitHub API', function () {
   });
 
   describe('PUT', function () {
-    it('should follow a user', function (done) {
+    it('should follow a user with `PUT` request', function (done) {
+      this.slow(500);
+
+      github.request('PUT', '/user/following/jonschlinkert', function(err, res) {
+        if (err) return done(err);
+        assert.equal(err === null, true);
+        assert.equal(typeof res === 'string', true);
+        assert.equal(res, '');
+        done();
+      });
+    });
+
+    it('should follow a user with `put` method', function (done) {
       this.slow(500);
 
       github.put('/user/following/jonschlinkert', function(err, res) {
         if (err) return done(err);
+        assert.equal(err === null, true);
+        assert.equal(typeof res === 'string', true);
+        assert.equal(res, '');
+        done();
+      });
+    });
+  });
 
-        console.log(arguments)
-        // assert.equal(Array.isArray(res), true);
+  describe('DELETE', function () {
+    it('should un-follow a user with `DELETE` request', function (done) {
+      this.slow(500);
+
+      github.request('DELETE', '/user/following/gisthub', function(err, res) {
+        if (err) return done(err);
+        assert.equal(err === null, true);
+        assert.equal(typeof res === 'string', true);
+        assert.equal(res, '');
+        done();
+      });
+    });
+
+    it('should un-follow a user with `del` method', function (done) {
+      this.slow(500);
+
+      github.del('/user/following/gisthub', function(err, res) {
+        if (err) return done(err);
+        assert.equal(err === null, true);
+        assert.equal(typeof res === 'string', true);
+        assert.equal(res, '');
         done();
       });
     });
   });
 });
-
-
-// describe('base', function () {
-//   it('should return an error message when the url is not found:', function (cb) {
-//     base('foo', function (err, res) {
-//       if (err) console.log(err);
-//       res.should.be.an.object;
-//       res.message.should.equal('Not Found');
-//       cb()
-//     });
-//   });
-//   it('should get a response from the github api:', function (cb) {
-//     base('repos/assemble/assemble/contributors', function (err, res) {
-//       if (err) console.log(err);
-//       res.should.be.an.array;
-//       res[0].should.have.properties(['login', 'id', 'avatar_url', 'gravatar_id']);
-//       cb();
-//     });
-//   });
-
-//   it('should throw an error when url is not a string:', function () {
-//     (function () {
-//       base();
-//     }).should.throw('github-api-base expects url to be a string.');
-//   });
-
-//   it('should throw an error when no callback is given.', function () {
-//     (function () {
-//       base('foo');
-//     }).should.throw('github-api-base expects callback to be a function.');
-
-//     (function () {
-//       base('foo', {});
-//     }).should.throw('github-api-base expects callback to be a function.');
-//   });
-// });
