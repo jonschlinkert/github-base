@@ -79,9 +79,9 @@ var GitHub = require('github-base');
 var github = new GitHub(options);
 ```
 
-### [.request](index.js#L50)
+### [.request](index.js#L51)
 
-Makes a single request to the GitHub API based on the provided settings. Supports any of the GitHub API VERBs:
+Uses [github-request](https://github.com/scottgonzalez/github-request) to make a single request to the GitHub API, based on the provided settings. Supports any of the GitHub API VERBs:
 
 * `GET`, `PUT`, `POST`, `DELETE`, `PATCH`
 
@@ -100,7 +100,7 @@ github.request('GET', '/user/orgs', function (err, res) {
 });
 ```
 
-### [.get](index.js#L70)
+### [.get](index.js#L71)
 
 Makes a single `GET` request to the GitHub API based on the
 provided settings.
@@ -125,9 +125,9 @@ github.get('/gists', function (err, res) {
 });
 ```
 
-### [.getAll](index.js#L86)
+### [.getAll](index.js#L87)
 
-Performs a request using [github-request][], and then if necessary
+Performs a request using [github-request](https://github.com/scottgonzalez/github-request), and then if necessary
 requests additional paged content based on the response. Data from
 all pages are concatenated together and buffered until the last
 page of data has been retrieved.
@@ -147,7 +147,7 @@ github.getAll(url, function(err, res) {
 });
 ```
 
-### [.del](index.js#L101)
+### [.del](index.js#L102)
 
 Makes a single `DELETE` request to the GitHub API based on the
 provided settings.
@@ -167,7 +167,7 @@ github.del('/user/following/someoneelse', function(err, res) {
 });
 ```
 
-### [.patch](index.js#L116)
+### [.patch](index.js#L117)
 
 Makes a single `PATCH` request to the GitHub API based on the
 provided settings.
@@ -189,7 +189,7 @@ github.patch('/gists/bd139161a425896f35f8', opts, function(err, res) {
 });
 ```
 
-### [.post](index.js#L131)
+### [.post](index.js#L132)
 
 Makes a single `POST` request to the GitHub API based on the
 provided settings.
@@ -210,7 +210,7 @@ github.post('/user/repos', opts, function(err, res) {
 });
 ```
 
-### [.put](index.js#L146)
+### [.put](index.js#L147)
 
 Makes a single `PUT` request to the GitHub API based on the
 provided settings.
@@ -230,7 +230,7 @@ github.put('/user/following/jonschlinkert', function(err, res) {
 });
 ```
 
-### [.extend](index.js#L174)
+### [.extend](index.js#L175)
 
 Convenience method for inheriting `GitHub`. Extends
 prototype and static methods.

@@ -34,8 +34,9 @@ GitHub.prototype = {
   constructor: GitHub,
 
   /**
-   * Makes a single request to the GitHub API based on the
-   * provided settings. Supports any of the GitHub API VERBs:
+   * Uses [github-request][] to make a single request to the
+   * GitHub API, based on the provided settings. Supports any
+   * of the GitHub API VERBs:
    *
    *   - `GET`, `PUT`, `POST`, `DELETE`, `PATCH`
    *
