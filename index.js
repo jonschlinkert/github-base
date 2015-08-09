@@ -1,8 +1,8 @@
 'use strict';
 
 var util = require('util');
-var gh = require('github-request');
 var extend = require('extend-shallow');
+var gh = require('github-request');
 var utils = require('./lib/utils');
 
 /**
@@ -34,8 +34,10 @@ GitHub.prototype = {
   constructor: GitHub,
 
   /**
-   * Make a request to the GitHub API. Supports any GitHub API
-   * VERB: `GET`, `PUT`, `POST`, `DELETE`, `PATCH`
+   * Makes a single request to the GitHub API based on the
+   * provided settings. Supports any of the GitHub API VERBs:
+   *
+   *   - `GET`, `PUT`, `POST`, `DELETE`, `PATCH`
    *
    * @name .request
    * @param  {String} `method`
@@ -55,7 +57,8 @@ GitHub.prototype = {
   },
 
   /**
-   * Make a `GET` request to the GitHub API.
+   * Makes a single `GET` request to the GitHub API based on the
+   * provided settings.
    *
    * @name .get
    * @param  {String} `path` path to append to the GitHub API URL.
@@ -69,12 +72,15 @@ GitHub.prototype = {
   },
 
   /**
-   * Create paginated requests to get all items regardless
-   * of the GitHub limit.
+   * Performs a request using [github-request][], and then if necessary
+   * requests additional paged content based on the response. Data from
+   * all pages are concatenated together and buffered until the last
+   * page of data has been retrieved.
    *
    * @name .getAll
    * @param  {String} `path` path to append to the GitHub API URL.
    * @param  {Function} `cb`
+   * @api public
    */
 
   getAll: function(path, cb) {
@@ -82,7 +88,8 @@ GitHub.prototype = {
   },
 
   /**
-   * Make a `DELETE` request to the GitHub API.
+   * Makes a single `DELETE` request to the GitHub API based on the
+   * provided settings.
    *
    * @name .del
    * @param  {String} `path` path to append to the GitHub API URL.
@@ -96,7 +103,8 @@ GitHub.prototype = {
   },
 
   /**
-   * Make a `PATCH` request to the GitHub API.
+   * Makes a single `PATCH` request to the GitHub API based on the
+   * provided settings.
    *
    * @name .patch
    * @param  {String} `path` path to append to the GitHub API URL.
@@ -110,7 +118,8 @@ GitHub.prototype = {
   },
 
   /**
-   * Make a `POST` request to the GitHub API.
+   * Makes a single `POST` request to the GitHub API based on the
+   * provided settings.
    *
    * @name .post
    * @param  {String} `path` path to append to the GitHub API URL.
@@ -124,7 +133,8 @@ GitHub.prototype = {
   },
 
   /**
-   * Make a `put` request to the GitHub API.
+   * Makes a single `PUT` request to the GitHub API based on the
+   * provided settings.
    *
    * @name .put
    * @param  {String} `path` path to append to the GitHub API URL.
