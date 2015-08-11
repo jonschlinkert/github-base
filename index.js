@@ -1,8 +1,8 @@
 'use strict';
 
 var util = require('util');
-var extend = require('extend-shallow');
 var gh = require('github-request');
+var extend = require('extend-shallow');
 var utils = require('./lib/utils');
 
 /**
@@ -21,9 +21,18 @@ function GitHub(options) {
   if (!(this instanceof GitHub)) {
     return new GitHub(options);
   }
+
   this.options = options || {};
-  this.options.apiurl = this.options.apiurl || 'https://api.github.com';
   this.defaults = utils.defaults(this.options);
+
+  if (!this.options.apiurl) {
+    this.options.apiurl = 'https://api.github.com';
+  }
+
+  this.interpolate = function(opts) {
+    var data = extend({}, this.options, opts);
+    return utils.interpolate(opts.path, data);
+  }.bind(this);
 }
 
 /**
@@ -54,7 +63,9 @@ GitHub.prototype = {
       data = null;
     }
     var opts = this.defaults(method, path, data);
+    opts.path = this.interpolate(opts);
     gh.request(opts, data, cb);
+    return this;
   },
 
   /**
@@ -70,6 +81,7 @@ GitHub.prototype = {
 
   get: function(path, data, cb) {
     this.request('GET', path, data, cb);
+    return this;
   },
 
   /**
@@ -85,7 +97,10 @@ GitHub.prototype = {
    */
 
   getAll: function(path, cb) {
-    gh.requestAll(this.defaults('GET', path), cb);
+    var opts = this.defaults('GET', path);
+    opts.path = this.interpolate(opts);
+    gh.requestAll(opts, cb);
+    return this;
   },
 
   /**
@@ -101,6 +116,7 @@ GitHub.prototype = {
 
   del: function(path, data, cb) {
     this.request('DELETE', path, data, cb);
+    return this;
   },
 
   /**
@@ -116,6 +132,7 @@ GitHub.prototype = {
 
   patch: function(path, data, cb) {
     this.request('PATCH', path, data, cb);
+    return this;
   },
 
   /**
@@ -131,6 +148,7 @@ GitHub.prototype = {
 
   post: function(path, data, cb) {
     this.request('POST', path, data, cb);
+    return this;
   },
 
   /**
@@ -146,6 +164,7 @@ GitHub.prototype = {
 
   put: function(path, data, cb) {
     this.request('PUT', path, data, cb);
+    return this;
   }
 };
 
