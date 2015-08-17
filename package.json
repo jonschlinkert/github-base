@@ -21,8 +21,12 @@
     "test": "mocha"
   },
   "dependencies": {
+    "concat-stream": "^1.5.0",
+    "delegate-properties": "^0.2.1",
     "extend-shallow": "^2.0.1",
-    "github-request": "jonschlinkert/github-request"
+    "merge-deep": "^2.0.0",
+    "object.omit": "^2.0.0",
+    "simple-get": "^1.4.2"
   },
   "devDependencies": {
     "mocha": "*",
@@ -45,6 +49,8 @@
   "verb": {
     "related": {
       "list": [
+        "gists",
+        "github-config",
         "github-contributors"
       ]
     }
