@@ -25,6 +25,7 @@ function GitHub(options) {
   }
 
   this.options = typeof options === 'object' ? options : {};
+  this.options.json = typeof this.options.json === 'boolean' ? this.options.json : true;
   this.options.apiurl = this.options.apiurl || 'https://api.github.com';
   this.defaults = utils.defaults(this.options);
 }
@@ -63,6 +64,10 @@ delegate(GitHub.prototype, {
     request(opts, function (err, res) {
       if (err) {return cb(err);}
       res.pipe(concat(function (data) {
+        data = data.toString();
+        if (data && data.length && opts.json === true) {
+          data = JSON.parse(data);
+        }
         cb(null, data, res);
       }));
     });

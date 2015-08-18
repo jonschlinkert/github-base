@@ -45,6 +45,7 @@ describe('Github API', function () {
       this.timeout(5000);
 
       Github(creds).post('/markdown', {
+        json: false,
         text: 'foo **bar** @tunnckoCore baz!',
         mode: 'gfm',
         headers: {
@@ -52,7 +53,6 @@ describe('Github API', function () {
         }
       }, function (err, data, stream) {
         assert.ifError(err);
-        data = data.toString();
         assert.ok(data.indexOf('https://github.com/tunnckoCore') !== -1);
         assert.strictEqual(stream.statusCode, 200);
         done();
@@ -62,6 +62,7 @@ describe('Github API', function () {
       this.timeout(5000);
 
       Github({
+        json: false,
         username: creds.username,
         password: creds.password,
         body: 'foo **bar** #1',
@@ -71,7 +72,6 @@ describe('Github API', function () {
       })
       .post('/markdown/raw', function (err, data) {
         assert.ifError(err);
-        data = data.toString();
         assert.strictEqual(data, '<p>foo <strong>bar</strong> #1</p>\n');
         done();
       });
@@ -85,7 +85,6 @@ describe('Github API', function () {
       var github = new Github(creds);
       github.get('/users/:username/repos', function (err, data) {
         assert.ifError(err);
-        data = JSON.parse(data.toString());
         assert.ok(data.length >= 3, 'expect `fake-user123` to have 3 or more repos');
         done();
       });
@@ -93,10 +92,8 @@ describe('Github API', function () {
     it('should datault to `bad credentials` when they are needed', function (done) {
       this.timeout(5000);
 
-      Github().get('/repos/tunnckoCore/dush', function (err, data) {
+      Github().get('/repos/tunnckoCore/dush', function (err, actual) {
         assert.ifError(err);
-
-        var actual = JSON.parse(data.toString());
         var expected = {
           message: 'Bad credentials',
           documentation_url: 'https://developer.github.com/v3'
@@ -113,11 +110,9 @@ describe('Github API', function () {
         note: 'foo-bar baz auth qux'
       }, function (err, tok) {
         assert.ifError(err);
-        tok = JSON.parse(tok.toString());
 
         Github({token: tok.token}).get('/gists', function (err, data) {
           assert.ifError(err);
-          data = JSON.parse(data.toString());
           assert.strictEqual(data.length > 0, true);
           Github(creds).del('/authorizations/:id', {id: tok.id}, done);
         });
@@ -133,7 +128,6 @@ describe('Github API', function () {
 
       github.get('/gists', function (err, data) {
         assert.ifError(err);
-        data = JSON.parse(data.toString());
         assert.strictEqual(data.length > 0, true);
         done();
       });
@@ -146,7 +140,6 @@ describe('Github API', function () {
         owner: 'tunnckoCore'
       }, function (err, data) {
         assert.ifError(err);
-        data = JSON.parse(data.toString());
         assert.strictEqual(data.length > 10, true);
         done();
       });
@@ -162,7 +155,6 @@ describe('Github API', function () {
 
       github.get('/users/:owner/gists', function (err, data) {
         assert.ifError(err);
-        data = JSON.parse(data.toString());
         assert.strictEqual(data.length > 5, true);
         done();
       });
@@ -181,7 +173,6 @@ describe('Github API', function () {
         repo: 'dush'
       }, function (err, data) {
         assert.ifError(err);
-        data = JSON.parse(data.toString());
         assert.strictEqual(typeof data, 'object');
         assert.strictEqual(data.name, 'dush');
         done();
@@ -199,7 +190,6 @@ describe('Github API', function () {
         id: 'aafbcdecb7bad02a2df1'
       }, function (err, data, stream) {
         assert.ifError(err);
-        data = JSON.parse(data.toString());
         assert.strictEqual(data.id, 'aafbcdecb7bad02a2df1');
         assert.strictEqual(data.url, 'https://api.github.com/gists/aafbcdecb7bad02a2df1');
         assert.strictEqual(stream.statusCode, 200);
@@ -223,7 +213,6 @@ describe('Github API', function () {
         subscribed: true
       }, function (err, data) {
         assert.ifError(err);
-        data = JSON.parse(data.toString());
         assert.strictEqual(data.subscribed, true);
         assert.strictEqual(data.ignored, false);
         done();
@@ -244,7 +233,6 @@ describe('Github API', function () {
         ignored: true
       }, function (err, data) {
         assert.ifError(err);
-        data = JSON.parse(data.toString());
         assert.strictEqual(data.subscribed, false);
         assert.strictEqual(data.ignored, true);
         done();
@@ -262,7 +250,6 @@ describe('Github API', function () {
         id: '32a6fe359168ecc6f76a'
       }, function (err, data, stream) {
         assert.ifError(err);
-        data = data.toString();
         assert.strictEqual(typeof data, 'string');
         assert.strictEqual(data, '');
         assert.strictEqual(stream.statusCode, 204);
@@ -282,7 +269,6 @@ describe('Github API', function () {
         method: 'get'
       }, function (err, data) {
         assert.ifError(err);
-        data = JSON.parse(data.toString());
         assert.strictEqual(Array.isArray(data), true);
         assert.strictEqual(data.length > 1, true);
         done();
@@ -304,7 +290,6 @@ describe('Github API', function () {
         description: 'gist update test ' + Math.random()
       }, function (err, data) {
         assert.ifError(err);
-        data = JSON.parse(data.toString());
         assert.strictEqual(data.id, 'aafbcdecb7bad02a2df1');
         assert.strictEqual(data.url, 'https://api.github.com/gists/aafbcdecb7bad02a2df1');
         done();
@@ -326,7 +311,6 @@ describe('Github API', function () {
         body: 'issue body from `github-base` by @tunnckoCore'
       }, function (err, data) {
         assert.ifError(err);
-        data = JSON.parse(data.toString());
         assert.strictEqual(data.number, 3);
         assert.strictEqual(data.title, 'github-base test');
         done();
@@ -345,7 +329,6 @@ describe('Github API', function () {
 
       github.request('DELETE', '/user/following/gisthub', function (err, data, stream) {
         assert.ifError(err);
-        data = data.toString();
         assert.strictEqual(typeof data, 'string');
         assert.strictEqual(data, '');
         assert.strictEqual(stream.statusCode, 204);
@@ -362,7 +345,6 @@ describe('Github API', function () {
 
       github.del('/user/following/gisthub', function (err, data, stream) {
         assert.ifError(err);
-        data = data.toString();
         assert.strictEqual(typeof data, 'string');
         assert.strictEqual(data, '');
         assert.strictEqual(stream.statusCode, 204);
