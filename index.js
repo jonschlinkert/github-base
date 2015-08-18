@@ -1,11 +1,11 @@
 'use strict';
 
 var util = require('util');
-var defaults = require('./lib/utils');
+var utils = require('./lib/utils');
 var request = require('simple-get');
 var concat = require('concat-stream');
 var extend = require('extend-shallow');
-var delegates = require('delegate-properties');
+var delegate = require('delegate-properties');
 
 /**
  * Create an instance of `GitHub` with the given options.
@@ -26,14 +26,14 @@ function GitHub(options) {
 
   this.options = typeof options === 'object' ? options : {};
   this.options.apiurl = this.options.apiurl || 'https://api.github.com';
-  this.defaults = defaults(this.options);
+  this.defaults = utils.defaults(this.options);
 }
 
 /**
  * GitHub prototype methods
  */
 
-delegates(GitHub.prototype, {
+delegate(GitHub.prototype, {
   constructor: GitHub,
 
   /**
@@ -97,12 +97,18 @@ delegates(GitHub.prototype, {
    * @api public
    */
 
-  // getAll: function(path, cb) {
-  //   var opts = this.defaults('GET', path);
-  //   opts.path = this.interpolate(opts);
-  //   gh.requestAll(opts, cb);
-  //   return this;
-  // },
+  getAll: function(path, data, cb) {
+    if (typeof data === 'function') {
+      cb = data;
+      data = null;
+    }
+
+    cb = typeof cb === 'function' ? cb : function noop () {};
+    var opts = this.defaults('GET', path, data);
+
+    utils.requestAll(opts, cb);
+    return this;
+  },
 
   /**
    * Makes a single `DELETE` request to the GitHub API based on the
@@ -181,7 +187,7 @@ delegates(GitHub.prototype, {
  */
 
 GitHub.delegate = function(methods) {
-  delegates(GitHub.prototype, methods);
+  delegate(GitHub.prototype, methods);
 };
 
 /**

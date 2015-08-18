@@ -79,6 +79,17 @@ describe('Github API', function () {
   });
 
   describe('GET', function () {
+    it('should concatenate all additional content with `.getAll`', function (done) {
+      this.timeout(15000);
+
+      var github = new Github(creds);
+      github.get('/users/:username/repos', function (err, data) {
+        assert.ifError(err);
+        data = JSON.parse(data.toString());
+        assert.ok(data.length >= 3, 'expect `fake-user123` to have 3 or more repos');
+        done();
+      });
+    });
     it('should datault to `bad credentials` when they are needed', function (done) {
       this.timeout(5000);
 

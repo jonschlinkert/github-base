@@ -24,8 +24,9 @@
     "concat-stream": "^1.5.0",
     "delegate-properties": "^0.2.1",
     "extend-shallow": "^2.0.1",
-    "merge-deep": "^2.0.0",
+    "mixin-deep": "^1.1.1",
     "object.omit": "^2.0.0",
+    "parse-link-header": "^0.3.0",
     "simple-get": "^1.4.2"
   },
   "devDependencies": {
