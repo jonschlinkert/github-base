@@ -1,9 +1,11 @@
 'use strict';
 
 var util = require('util');
-var gh = require('github-request');
-var extend = require('extend-shallow');
 var utils = require('./lib/utils');
+var request = require('simple-get');
+var concat = require('concat-stream');
+var extend = require('extend-shallow');
+var delegate = require('delegate-properties');
 
 /**
  * Create an instance of `GitHub` with the given options.
@@ -22,24 +24,17 @@ function GitHub(options) {
     return new GitHub(options);
   }
 
-  this.options = options || {};
+  this.options = typeof options === 'object' ? options : {};
+  this.options.json = typeof this.options.json === 'boolean' ? this.options.json : true;
+  this.options.apiurl = this.options.apiurl || 'https://api.github.com';
   this.defaults = utils.defaults(this.options);
-
-  if (!this.options.apiurl) {
-    this.options.apiurl = 'https://api.github.com';
-  }
-
-  this.interpolate = function(opts) {
-    var data = extend({}, this.options, opts);
-    return utils.interpolate(opts.path, data);
-  }.bind(this);
 }
 
 /**
  * GitHub prototype methods
  */
 
-GitHub.prototype = {
+delegate(GitHub.prototype, {
   constructor: GitHub,
 
   /**
@@ -62,9 +57,20 @@ GitHub.prototype = {
       cb = data;
       data = null;
     }
+
+    cb = typeof cb === 'function' ? cb : function noop () {};
     var opts = this.defaults(method, path, data);
-    opts.path = this.interpolate(opts);
-    gh.request(opts, data, cb);
+
+    request(opts, function (err, res) {
+      if (err) {return cb(err);}
+      res.pipe(concat(function (data) {
+        data = data.toString();
+        if (data && data.length && opts.json === true) {
+          data = JSON.parse(data);
+        }
+        cb(null, data, res);
+      }));
+    });
     return this;
   },
 
@@ -96,10 +102,16 @@ GitHub.prototype = {
    * @api public
    */
 
-  getAll: function(path, cb) {
-    var opts = this.defaults('GET', path);
-    opts.path = this.interpolate(opts);
-    gh.requestAll(opts, cb);
+  getAll: function(path, data, cb) {
+    if (typeof data === 'function') {
+      cb = data;
+      data = null;
+    }
+
+    cb = typeof cb === 'function' ? cb : function noop () {};
+    var opts = this.defaults('GET', path, data);
+
+    utils.requestAll(opts, cb);
     return this;
   },
 
@@ -166,7 +178,7 @@ GitHub.prototype = {
     this.request('PUT', path, data, cb);
     return this;
   }
-};
+});
 
 /**
  * Static method for delegating non-enumerable properties from
@@ -180,7 +192,7 @@ GitHub.prototype = {
  */
 
 GitHub.delegate = function(methods) {
-  utils.delegate(GitHub.prototype, methods);
+  delegate(GitHub.prototype, methods);
 };
 
 /**

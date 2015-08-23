@@ -21,13 +21,17 @@
     "test": "mocha"
   },
   "dependencies": {
+    "concat-stream": "^1.5.0",
+    "delegate-properties": "^0.2.1",
     "extend-shallow": "^2.0.1",
-    "github-request": "jonschlinkert/github-request"
+    "mixin-deep": "^1.1.1",
+    "object.omit": "^2.0.0",
+    "parse-link-header": "^0.3.0",
+    "simple-get": "^1.4.2"
   },
   "devDependencies": {
     "mocha": "*",
-    "randomatic": "^1.1.0",
-    "should": "*"
+    "randomatic": "^1.1.0"
   },
   "keywords": [
     "api",
@@ -45,6 +49,8 @@
   "verb": {
     "related": {
       "list": [
+        "gists",
+        "github-config",
         "github-contributors"
       ]
     }
