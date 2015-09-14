@@ -1,7 +1,7 @@
 {
   "name": "github-base",
   "description": "Base methods for creating node.js apps that work with the GitHub API.",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "homepage": "https://github.com/jonschlinkert/github-base",
   "author": "Jon Schlinkert (https://github.com/jonschlinkert)",
   "repository": "jonschlinkert/github-base",
@@ -53,6 +53,10 @@
         "github-config",
         "github-contributors"
       ]
-    }
+    },
+    "reflinks": [
+      "verb",
+      "simple-get"
+    ]
   }
 }
