@@ -38,7 +38,7 @@ delegate(GitHub.prototype, {
   constructor: GitHub,
 
   /**
-   * Uses [github-request][] to make a single request to the
+   * Uses [simple-get][] to make a single request to the
    * GitHub API, based on the provided settings. Supports any
    * of the GitHub API VERBs:
    *
@@ -91,7 +91,7 @@ delegate(GitHub.prototype, {
   },
 
   /**
-   * Performs a request using [github-request][], and then if necessary
+   * Performs a request using [simple-get][], and then if necessary
    * requests additional paged content based on the response. Data from
    * all pages are concatenated together and buffered until the last
    * page of data has been retrieved.
