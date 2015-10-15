@@ -103,7 +103,7 @@ describe('Github API', function () {
         done();
       });
     });
-    it('should auth with token', function (done) {
+    it.skip('should auth with token', function (done) {
       this.timeout(5000);
 
       Github(creds).post('/authorizations', {
