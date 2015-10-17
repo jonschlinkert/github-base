@@ -89,19 +89,20 @@ describe('Github API', function () {
         done();
       });
     });
-    it('should datault to `bad credentials` when they are needed', function (done) {
+    it('should default to `bad credentials` when they are needed', function (done) {
       this.timeout(5000);
 
-      Github().get('/repos/tunnckoCore/dush', function (err, actual) {
-        assert.ifError(err);
-        var expected = {
-          message: 'Bad credentials',
-          documentation_url: 'https://developer.github.com/v3'
-        };
+      Github({username: 'bad', password: 'credentials'})
+        .get('/repos/tunnckoCore/dush', function (err, actual) {
+          assert.ifError(err);
+          var expected = {
+            message: 'Bad credentials',
+            documentation_url: 'https://developer.github.com/v3'
+          };
 
-        assert.deepEqual(actual, expected);
-        done();
-      });
+          assert.deepEqual(actual, expected);
+          done();
+        });
     });
     it.skip('should auth with token', function (done) {
       this.timeout(5000);
@@ -116,6 +117,17 @@ describe('Github API', function () {
           assert.strictEqual(data.length > 0, true);
           Github(creds).del('/authorizations/:id', {id: tok.id}, done);
         });
+      });
+    });
+    it('should get resources when unauthenticated', function (done) {
+      this.timeout(5000);
+
+      var github = new Github();
+
+      github.get('/repos/:repo/contributors', {repo: 'jonschlinkert/github-base'}, function (err, data) {
+        assert.ifError(err);
+        assert.strictEqual(data.length > 0, true);
+        done();
       });
     });
     it('should auth with username and password', function (done) {
@@ -295,7 +307,7 @@ describe('Github API', function () {
         done();
       });
     });
-    it('should edit an issue with `.patch` method', function (done) {
+    it.skip('should edit an issue with `.patch` method', function (done) {
       this.timeout(5000);
 
       var github = new Github({
