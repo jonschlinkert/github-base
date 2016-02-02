@@ -80,12 +80,12 @@ describe('Github API', function () {
 
   describe('GET', function () {
     it('should concatenate all additional content with `.getAll`', function (done) {
-      this.timeout(15000);
+      this.timeout(30000);
 
       var github = new Github(creds);
-      github.get('/users/:username/repos', function (err, data) {
+      github.getAll('/users/:jon/repos', {jon: 'jonschlinkert'}, function (err, data) {
         assert.ifError(err);
-        assert.ok(data.length >= 3, 'expect `fake-user123` to have 3 or more repos');
+        assert.ok(data.length >= 500, 'expect `jonschlinkert` to have more than 500 repos');
         done();
       });
     });
