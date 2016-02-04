@@ -26,7 +26,7 @@
     "extend-shallow": "^2.0.1",
     "mixin-deep": "^1.1.3",
     "object.omit": "^2.0.0",
-    "parse-link-header": "^0.4.1",
+    "request-all": "^1.0.0",
     "simple-get": "^1.4.3"
   },
   "devDependencies": {
@@ -51,11 +51,13 @@
       "list": [
         "gists",
         "github-config",
-        "github-contributors"
+        "github-contributors",
+        "request-all"
       ]
     },
     "reflinks": [
       "verb",
+      "request-all",
       "simple-get"
     ]
   }
