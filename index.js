@@ -1,5 +1,6 @@
 'use strict';
 
+var use = require('use');
 var util = require('util');
 var utils = require('./lib/utils');
 var request = require('request-all')(require('simple-get'));
@@ -28,6 +29,7 @@ function GitHub(options) {
   this.options.json = typeof this.options.json === 'boolean' ? this.options.json : true;
   this.options.apiurl = this.options.apiurl || 'https://api.github.com';
   this.defaults = utils.defaults(this.options);
+  use(this);
 }
 
 /**

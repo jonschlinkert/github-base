@@ -9,8 +9,26 @@ var creds = {
   password: 'fakeuser123'
 };
 
-describe('static methods', function () {
-  it('should inherit Github with `.extend`', function (done) {
+
+describe('methods', function () {
+  it('should have `.use` method on instance (allowing plugins)', function (done) {
+    function forksPlugin (app) {
+      app.forks = function (path, data, cb) {
+        path = typeof path === 'string' ? path : ':owner/:repo';
+        return app.request('GET', '/repos/' + path + '/forks', data, cb);
+      };
+    }
+
+    var github = Github(creds)
+    var app = github.use(forksPlugin);
+
+    app.forks('jonschlinkert/github-base', function (err, data) {
+      assert.ifError(err);
+      assert.strictEqual(data.length > 0, true, 'should have more than zero forks');
+      done();
+    });
+  });
+  it('should inherit Github with `.extend` static method', function (done) {
     function Foo () {
       Github.call(this);
     }
@@ -20,7 +38,7 @@ describe('static methods', function () {
     assert.strictEqual(typeof Foo.prototype.put, 'function');
     done();
   });
-  it('should add prototype methods with delegate:', function (done) {
+  it('should add prototype methods with `.delegate` static method', function (done) {
     function Foo () {
       Github.call(this);
     }
