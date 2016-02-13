@@ -61,9 +61,9 @@ delegate(GitHub.prototype, {
     cb = typeof cb === 'function' ? cb : function noop () {};
     var opts = this.defaults(method, path, data);
 
-    request(opts, function (err, res) {
+    request(opts, function(err, res) {
       if (err) {return cb(err);}
-      res.pipe(concat(function (data) {
+      res.pipe(concat(function(data) {
         data = data.toString();
         if (data && data.length && opts.json === true) {
           data = JSON.parse(data);
@@ -203,7 +203,7 @@ GitHub.delegate = function(methods) {
  * @api public
  */
 
-GitHub.extend = function (Ctor) {
+GitHub.extend = function(Ctor) {
   util.inherits(Ctor, GitHub);
   extend(Ctor, GitHub);
 };
