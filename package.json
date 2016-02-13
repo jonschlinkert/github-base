@@ -47,6 +47,9 @@
     "request"
   ],
   "verb": {
+    "tasks": [
+      "readme"
+    ],
     "related": {
       "list": [
         "gists",
@@ -55,8 +58,8 @@
       ]
     },
     "reflinks": [
-      "verb",
-      "simple-get"
+      "simple-get",
+      "verb"
     ]
   }
 }
