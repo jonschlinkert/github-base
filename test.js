@@ -103,7 +103,7 @@ describe('Github API', function () {
       var github = new Github(creds);
       github.getAll('/users/:jon/repos', {jon: 'jonschlinkert'}, function (err, data) {
         assert.ifError(err);
-        assert.ok(data.length >= 500, 'expect `jonschlinkert` to have more than 500 repos');
+        assert.ok(data.length >= 700, 'expect `jonschlinkert` to have more than 700 repos');
         done();
       });
     });
