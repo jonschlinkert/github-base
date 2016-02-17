@@ -1,8 +1,9 @@
 'use strict';
 
+var use = require('use');
 var util = require('util');
 var utils = require('./lib/utils');
-var request = require('simple-get');
+var request = require('request-all')(require('simple-get'));
 var concat = require('concat-stream');
 var extend = require('extend-shallow');
 var delegate = require('delegate-properties');
@@ -28,6 +29,7 @@ function GitHub(options) {
   this.options.json = typeof this.options.json === 'boolean' ? this.options.json : true;
   this.options.apiurl = this.options.apiurl || 'https://api.github.com';
   this.defaults = utils.defaults(this.options);
+  use(this);
 }
 
 /**
@@ -91,7 +93,7 @@ delegate(GitHub.prototype, {
   },
 
   /**
-   * Performs a request using [simple-get][], and then if necessary
+   * Performs a request using [request-all][], and then if necessary
    * requests additional paged content based on the response. Data from
    * all pages are concatenated together and buffered until the last
    * page of data has been retrieved.
@@ -111,7 +113,7 @@ delegate(GitHub.prototype, {
     cb = typeof cb === 'function' ? cb : function noop () {};
     var opts = this.defaults('GET', path, data);
 
-    utils.requestAll(opts, cb);
+    request.requestAll(opts, cb);
     return this;
   },
 
