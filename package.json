@@ -1,6 +1,6 @@
 {
   "name": "github-base",
-  "description": "Base methods for creating node.js apps that work with the GitHub API.",
+  "description": "JavaScript wrapper that greatly simplifies working with GitHub's API.",
   "version": "0.4.1",
   "homepage": "https://github.com/jonschlinkert/github-base",
   "author": "Jon Schlinkert (https://github.com/jonschlinkert)",
@@ -11,7 +11,7 @@
   "license": "MIT",
   "files": [
     "index.js",
-    "lib/"
+    "lib"
   ],
   "main": "index.js",
   "engines": {
@@ -21,20 +21,25 @@
     "test": "mocha"
   },
   "dependencies": {
-    "concat-stream": "^1.5.0",
-    "delegate-properties": "^0.3.0",
+    "define-property": "^0.2.5",
     "extend-shallow": "^2.0.1",
+    "is-buffer": "^1.1.4",
     "mixin-deep": "^1.1.3",
     "object.omit": "^2.0.0",
     "parse-link-header": "^0.4.1",
-    "simple-get": "^1.4.3"
+    "simple-get": "^2.2.2",
+    "static-extend": "^0.1.2",
+    "use": "^2.0.0"
   },
   "devDependencies": {
-    "mocha": "*",
-    "randomatic": "^1.1.0"
+    "data-store": "^0.16.1",
+    "gulp-format-md": "^0.1.10",
+    "mocha": "^3.0.2",
+    "yargs-parser": "^3.2.0"
   },
   "keywords": [
     "api",
+    "base",
     "del",
     "delete",
     "get",
@@ -47,19 +52,25 @@
     "request"
   ],
   "verb": {
+    "layout": "default",
     "tasks": [
       "readme"
+    ],
+    "plugins": [
+      "gulp-format-md"
     ],
     "related": {
       "list": [
         "gists",
-        "github-config",
-        "github-contributors"
+        "github-contributors",
+        "ask-for-github-auth"
       ]
     },
     "reflinks": [
       "simple-get",
-      "verb"
+      "verb",
+      "static-extend",
+      "verb-generate-readme"
     ]
   }
 }

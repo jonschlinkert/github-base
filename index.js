@@ -1,11 +1,7 @@
 'use strict';
 
-var util = require('util');
+var use = require('use');
 var utils = require('./lib/utils');
-var request = require('simple-get');
-var concat = require('concat-stream');
-var extend = require('extend-shallow');
-var delegate = require('delegate-properties');
 
 /**
  * Create an instance of `GitHub` with the given options.
@@ -21,192 +17,213 @@ var delegate = require('delegate-properties');
 
 function GitHub(options) {
   if (!(this instanceof GitHub)) {
-    return new GitHub(options);
+    var proto = Object.create(GitHub.prototype);
+    GitHub.apply(proto, arguments);
+    return proto;
   }
-
-  this.options = typeof options === 'object' ? options : {};
-  this.options.json = typeof this.options.json === 'boolean' ? this.options.json : true;
-  this.options.apiurl = this.options.apiurl || 'https://api.github.com';
-  this.defaults = utils.defaults(this.options);
+  use(this);
+  this.defaults = utils.defaults(options);
 }
 
 /**
  * GitHub prototype methods
  */
 
-delegate(GitHub.prototype, {
+GitHub.prototype = {
   constructor: GitHub,
 
   /**
-   * Uses [simple-get][] to make a single request to the
-   * GitHub API, based on the provided settings. Supports any
-   * of the GitHub API VERBs:
+   * Uses [simple-get][] to make a single request to the GitHub API, based on
+   * the provided settings. Supports any of the GitHub API VERBs:
    *
-   *   - `GET`, `PUT`, `POST`, `DELETE`, `PATCH`
+   *   - `GET`
+   *   - `PUT`
+   *   - `POST`
+   *   - `DELETE`
+   *   - `PATCH`
    *
+   * ```js
+   * //example..request
+   * github.request('GET', '/user/orgs', function (err, res) {
+   *   //=> array of orgs
+   * });
+   * ```
    * @name .request
-   * @param  {String} `method`
+   * @param  {String} `method` The http VERB to use
    * @param  {String} `url` GitHub API URL to use.
-   * @param  {Options} `data` Request options.
+   * @param  {Options} `options` Request options.
    * @param  {Function} `cb`
    * @api public
    */
 
-  request: function(method, path, data, cb) {
-    if (typeof data === 'function') {
-      cb = data;
-      data = null;
+  request: function(method, path, options, cb) {
+    if (typeof options === 'function') {
+      return this.request.call(this, method, path, {}, options);
     }
-
-    cb = typeof cb === 'function' ? cb : function noop () {};
-    var opts = this.defaults(method, path, data);
-
-    request(opts, function(err, res) {
-      if (err) {return cb(err);}
-      res.pipe(concat(function(data) {
-        data = data.toString();
-        if (data && data.length && opts.json === true) {
-          data = JSON.parse(data);
-        }
-        cb(null, data, res);
-      }));
-    });
-    return this;
+    if (typeof cb !== 'function') {
+      throw new TypeError('expected callback to be a function');
+    }
+    utils.request(this.defaults(method, path, options), cb);
   },
 
   /**
    * Makes a single `GET` request to the GitHub API based on the
    * provided settings.
    *
+   * ```js
+   * // get orgs for the authenticated user
+   * github.get('/user/orgs', function (err, res) {
+   *   //=> array of orgs
+   * });
+   *
+   * // get gists for the authenticated user
+   * github.get('/gists', function (err, res) {
+   *   //=> array of gists
+   * });
+   * ```
    * @name .get
    * @param  {String} `path` path to append to the GitHub API URL.
-   * @param  {Options} `data` Request options.
+   * @param  {Options} `options` Request options.
    * @param  {Function} `cb`
    * @api public
    */
 
-  get: function(path, data, cb) {
-    this.request('GET', path, data, cb);
-    return this;
+  get: function(path, options, cb) {
+    this.request('GET', path, options, cb);
   },
 
   /**
-   * Performs a request using [simple-get][], and then if necessary
-   * requests additional paged content based on the response. Data from
-   * all pages are concatenated together and buffered until the last
-   * page of data has been retrieved.
+   * Performs a request using [simple-get][], and then if necessary requests
+   * additional paged content based on the response. Data from all pages are
+   * concatenated together and buffered until the last page of data has been retrieved.
    *
-   * @name .getAll
+   * ```js
+   * // get all repos for the authenticated user
+   * var url = '/user/repos?type=all&per_page=1000&sort=updated';
+   * github.paged(url, function(err, res) {
+   *   console.log(res);
+   * });
+   * ```
+   * @name .paged
    * @param  {String} `path` path to append to the GitHub API URL.
    * @param  {Function} `cb`
    * @api public
    */
 
-  getAll: function(path, data, cb) {
-    if (typeof data === 'function') {
-      cb = data;
-      data = null;
+  paged: function(path, options, cb) {
+    if (typeof options === 'function') {
+      this.paged.call(this, path, {}, options);
+      return;
     }
-
-    cb = typeof cb === 'function' ? cb : function noop () {};
-    var opts = this.defaults('GET', path, data);
-
-    utils.requestAll(opts, cb);
-    return this;
+    utils.paged(this.defaults('GET', path, options), cb);
   },
 
   /**
    * Makes a single `DELETE` request to the GitHub API based on the
    * provided settings.
    *
+   * ```js
+   * // un-follow someone
+   * github.del('/user/following/someoneelse', function(err, res) {
+   *   console.log(res);
+   * });
+   * ```
    * @name .del
    * @param  {String} `path` path to append to the GitHub API URL.
-   * @param  {Options} `data` Request options.
+   * @param  {Options} `options` Request options.
    * @param  {Function} `cb`
    * @api public
    */
 
-  del: function(path, data, cb) {
-    this.request('DELETE', path, data, cb);
-    return this;
+  del: function(path, options, cb) {
+    this.request('DELETE', path, options, cb);
   },
 
   /**
    * Makes a single `PATCH` request to the GitHub API based on the
    * provided settings.
    *
+   * ```js
+   * // update a gist
+   * var fs = require('fs');
+   * var opts = {files: {'readme.md': { content: '# My Readme...' }}};
+   * github.patch('/gists/bd139161a425896f35f8', opts, function(err, res) {
+   *   console.log(err, res);
+   * });
+   * ```
    * @name .patch
    * @param  {String} `path` path to append to the GitHub API URL.
-   * @param  {Options} `data` Request options.
+   * @param  {Options} `options` Request options.
    * @param  {Function} `cb`
    * @api public
    */
 
-  patch: function(path, data, cb) {
-    this.request('PATCH', path, data, cb);
-    return this;
+  patch: function(path, options, cb) {
+    this.request('PATCH', path, options, cb);
   },
 
   /**
    * Makes a single `POST` request to the GitHub API based on the
    * provided settings.
    *
+   * ```js
+   * // create a new repo
+   * var opts = { name:  'new-repo-name' };
+   * github.post('/user/repos', opts, function(err, res) {
+   *   console.log(res);
+   * });
+   * ```
    * @name .post
    * @param  {String} `path` path to append to the GitHub API URL.
-   * @param  {Options} `data` Request options.
+   * @param  {Options} `options` Request options.
    * @param  {Function} `cb`
    * @api public
    */
 
-  post: function(path, data, cb) {
-    this.request('POST', path, data, cb);
-    return this;
+  post: function(path, options, cb) {
+    this.request('POST', path, options, cb);
   },
 
   /**
-   * Makes a single `PUT` request to the GitHub API based on the
-   * provided settings.
+   * Makes a single `PUT` request to the GitHub API based on the provided
+   * settings.
    *
+   * ```js
+   * // follow someone
+   * github.put('/user/following/jonschlinkert', function(err, res) {
+   *   console.log(res);
+   * });
+   * ```
    * @name .put
    * @param  {String} `path` path to append to the GitHub API URL.
-   * @param  {Options} `data` Request options.
+   * @param  {Options} `options` Request options.
    * @param  {Function} `cb`
    * @api public
    */
 
-  put: function(path, data, cb) {
-    this.request('PUT', path, data, cb);
-    return this;
+  put: function(path, options, cb) {
+    this.request('PUT', path, options, cb);
   }
-});
-
-/**
- * Static method for delegating non-enumerable properties from
- * the given `object` onto the `GitHub.prototype`. In other words,
- * this is used to extend the class with additional methods.
- *
- * See the [delegate example](./examples/delegate.js) for more details.
- *
- * @param  {Object} `receiver` The receiver object.
- * @param  {Object} `methods` Object with methods to add to the prototype.
- */
-
-GitHub.delegate = function(methods) {
-  delegate(GitHub.prototype, methods);
 };
 
 /**
- * Convenience method for inheriting `GitHub`. Extends
- * prototype and static methods.
+ * Static method for inheriting the prototype and static methods of the `Base` class.
+ * This method greatly simplifies the process of creating inheritance-based applications.
+ * See [static-extend][] for more details.
  *
- * @param  {Object} `Ctor`
+ * ```js
+ * var GitHub = require('github-base');
+ * function MyApp() {
+ *   GitHub.call(this);
+ * }
+ * GitHub.extend(MyApp);
+ * ```
+ * @name #extend
+ * @param {Function} `Ctor` constructor to extend
  * @api public
  */
 
-GitHub.extend = function(Ctor) {
-  util.inherits(Ctor, GitHub);
-  extend(Ctor, GitHub);
-};
+utils.define(GitHub, 'extend', utils.staticExtend(GitHub));
 
 /**
  * Expose `GitHub`

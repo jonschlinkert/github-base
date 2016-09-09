@@ -1,6 +1,6 @@
 var fs = require('fs');
 var GitHub = require('..');
-var github = new GitHub(require('./_fake_user'));
+var github = new GitHub(require('./auth'));
 
 /**
  * Get a gist

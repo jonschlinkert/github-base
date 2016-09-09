@@ -1,4 +1,4 @@
-var fake_user = require('./_fake_user');
+var auth = require('./auth');
 var GitHub = require('../');
 
 /**
@@ -13,17 +13,13 @@ GitHub.extend(User);
 
 User.prototype.orgs = function (cb) {
   this.get('/user/orgs', cb);
-});
+};
 
 /**
  * Usage
  */
 
-var user = new User({
-  username: fake_user.USERNAME,
-  password: fake_user.PASSWORD,
-});
-
+var user = new User(auth);
 user.orgs(function (err, res) {
   console.log(res);
   //=> do stuff with res
