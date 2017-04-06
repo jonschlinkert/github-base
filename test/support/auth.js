@@ -8,8 +8,8 @@ if (!auth) {
   });
 
   auth = {};
-  auth.username = argv.username || argv._[0];
-  auth.password = argv.password || argv._[1];
+  auth.username = argv.username || argv._[0] || process.env.GITHUB_USERNAME;
+  auth.password = argv.password || argv._[1] || process.env.GITHUB_PASSWORD;
 }
 
 if (auth.username && auth.password) {
