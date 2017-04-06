@@ -1,7 +1,7 @@
 {
   "name": "github-base",
   "description": "JavaScript wrapper that greatly simplifies working with GitHub's API.",
-  "version": "0.5.1",
+  "version": "0.5.2",
   "homepage": "https://github.com/jonschlinkert/github-base",
   "author": "Jon Schlinkert (https://github.com/jonschlinkert)",
   "repository": "jonschlinkert/github-base",
