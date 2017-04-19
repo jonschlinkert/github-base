@@ -9,11 +9,15 @@ var github;
 describe('.get', function() {
   describe('authentication', function() {
     it('should default to `bad credentials` when they are needed', function(cb) {
-      this.timeout(5000);
+      this.timeout(10000);
 
       github = new GitHub({username: 'bad', password: 'credentials'});
       github.get(`/repos/${auth.username}/fooobarbaz`, function(err, actual) {
-        if (err) return cb(err);
+        if (err) {
+          cb(err);
+          return;
+        }
+
         var expected = {
           message: 'Bad credentials',
           documentation_url: 'https://developer.github.com/v3'

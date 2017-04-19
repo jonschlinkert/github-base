@@ -13,12 +13,15 @@ describe('.del', function() {
     });
 
     it('should un-follow a user', function(cb) {
-      this.timeout(5000);
+      this.timeout(20000);
 
       github.del('/user/following/node', function(err, data, stream) {
-        if (err) return cb(err);
+        if (err) {
+          cb(err);
+          return;
+        }
         assert.strictEqual(typeof data, 'string');
-        assert.strictEqual(data, '');
+        assert.strictEqual(data.toString(), '');
         assert.strictEqual(stream.statusCode, 204);
         cb();
       });
