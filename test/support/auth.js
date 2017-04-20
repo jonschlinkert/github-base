@@ -15,9 +15,9 @@ if (!auth) {
 if (auth.username && auth.password) {
   store.set('auth', auth);
 } else {
-  console.error('please specific authentication details');
-  console.error('--username, -u (or first arg)');
-  console.error('--password, -p (or second arg)');
+  console.error('please specify authentication details');
+  console.error('--username, -u (or first argument)');
+  console.error('--password, -p (or second argument)');
   process.exit(1);
 }
 
