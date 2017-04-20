@@ -4,6 +4,11 @@
   "version": "0.5.2",
   "homepage": "https://github.com/jonschlinkert/github-base",
   "author": "Jon Schlinkert (https://github.com/jonschlinkert)",
+  "contributors": [
+    "Brian Woodward <brian.woodward@gmail.com> (https://twitter.com/doowb)",
+    "Charlike Mike Reagent (https://i.am.charlike.online)",
+    "Jon Schlinkert <jon.schlinkert@sellside.com> (http://twitter.com/jonschlinkert)"
+  ],
   "repository": "jonschlinkert/github-base",
   "bugs": {
     "url": "https://github.com/jonschlinkert/github-base/issues"
@@ -61,15 +66,15 @@
     ],
     "related": {
       "list": [
+        "ask-for-github-auth",
         "gists",
-        "github-contributors",
-        "ask-for-github-auth"
+        "github-contributors"
       ]
     },
     "reflinks": [
       "simple-get",
-      "verb",
       "static-extend",
+      "verb",
       "verb-generate-readme"
     ]
   }
