@@ -44,6 +44,19 @@ describe('.request', function() {
           cb();
         });
       });
+
+      it('should `GET` the gist with `.request` method since 3017', function(cb) {
+        this.timeout(5000);
+
+        github.request('GET', '/gists', {
+          params: ['since'],
+          since: '3017-10-16T09:12:01.280Z'
+        }, function(err, data, stream) {
+          if (err) return cb(err);
+          assert.strictEqual(data.url, 'https://api.github.com/gists?since=2017-10-16T09:12:01.280Z');
+          cb();
+        });
+      });
     });
 
     describe('PUT /repos', function() {

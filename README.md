@@ -247,11 +247,12 @@ Pull requests and stars are always welcome. For bugs and feature requests, [plea
 
 ### Contributors
 
-| **Commits** | **Contributor** | 
+| **Commits** | **Contributor** |
 | --- | --- |
 | 31 | [jonschlinkert](https://github.com/jonschlinkert) |
 | 7 | [tunnckoCore](https://github.com/tunnckoCore) |
 | 6 | [doowb](https://github.com/doowb) |
+| 1 | [tennisonchan](https://github.com/tennisonchan) |
 
 ### Building docs
 
