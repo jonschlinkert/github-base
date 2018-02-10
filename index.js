@@ -10,7 +10,7 @@ const utils = require('./lib/utils');
  * const GitHub = require('github-base');
  * const github = new GitHub(options);
  * ```
- *
+ * @name GitHub
  * @param {Object} `options`
  * @api public
  */
@@ -169,7 +169,7 @@ class GitHub {
   }
 
   /**
-   *
+   * Recursively get all pages for a GET request.
    *
    * ```js
    * // get all repos for the authenticated user
