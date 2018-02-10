@@ -5,9 +5,9 @@
   "homepage": "https://github.com/jonschlinkert/github-base",
   "author": "Jon Schlinkert (https://github.com/jonschlinkert)",
   "contributors": [
-    "Brian Woodward <brian.woodward@gmail.com> (https://twitter.com/doowb)",
-    "Charlike Mike Reagent (https://i.am.charlike.online)",
-    "Jon Schlinkert <jon.schlinkert@sellside.com> (http://twitter.com/jonschlinkert)"
+    "Brian Woodward (https://twitter.com/doowb)",
+    "Jon Schlinkert (http://twitter.com/jonschlinkert)",
+    "Olsten Larck (https://i.am.charlike.online)"
   ],
   "repository": "jonschlinkert/github-base",
   "bugs": {
@@ -20,27 +20,28 @@
   ],
   "main": "index.js",
   "engines": {
-    "node": ">=0.10.0"
+    "node": ">=8"
   },
   "scripts": {
     "test": "mocha"
   },
   "dependencies": {
-    "define-property": "^0.2.5",
-    "extend-shallow": "^2.0.1",
-    "is-buffer": "^1.1.5",
-    "mixin-deep": "^1.2.0",
-    "object.omit": "^2.0.1",
-    "parse-link-header": "^0.4.1",
-    "simple-get": "^2.5.1",
-    "static-extend": "^0.1.2",
-    "use": "^3.0.0"
+    "arr-union": "^3.1.0",
+    "clone-deep": "^3.0.1",
+    "get-value": "^3.0.0",
+    "has-value": "^2.0.1",
+    "needle": "^2.1.1",
+    "object.omit": "^3.0.0",
+    "paged-request": "^1.0.2",
+    "parse-link-header": "^1.0.1",
+    "use": "^3.1.0"
   },
   "devDependencies": {
-    "data-store": "^0.16.1",
-    "gulp-format-md": "^0.1.12",
-    "mocha": "^3.2.0",
-    "yargs-parser": "^5.0.0"
+    "data-store": "^1.0.0",
+    "gulp-format-md": "^1.0.0",
+    "kind-of": "^6.0.2",
+    "minimist": "^1.2.0",
+    "mocha": "^3.5.3"
   },
   "keywords": [
     "api",
@@ -70,12 +71,15 @@
         "gists",
         "github-contributors"
       ]
-    },
-    "reflinks": [
-      "simple-get",
-      "static-extend",
-      "verb",
-      "verb-generate-readme"
-    ]
+    }
+  },
+  "lintDeps": {
+    "devDependencies": {
+      "files": {
+        "patterns": [
+          "paged.js"
+        ]
+      }
+    }
   }
 }

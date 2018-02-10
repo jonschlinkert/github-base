@@ -1,30 +1,25 @@
 'use strict';
 
 require('mocha');
-var assert = require('assert');
-var auth = require('./support/auth');
-var GitHub = require('..');
-var github;
+const assert = require('assert');
+const typeOf = require('kind-of');
+const auth = require('./support/auth');
+const GitHub = require('..');
+let github;
 
 describe('.del', function() {
+  this.timeout(10000);
+
+  beforeEach(() => (github = new GitHub(auth)));
+
   describe('DELETE /user/', function() {
-    beforeEach(function() {
-      github = new GitHub(auth);
-    });
-
-    it('should un-follow a user', function(cb) {
-      this.timeout(20000);
-
-      github.del('/user/following/node', function(err, data, stream) {
-        if (err) {
-          cb(err);
-          return;
-        }
-        assert.strictEqual(typeof data, 'string');
-        assert.strictEqual(data.toString(), '');
-        assert.strictEqual(stream.statusCode, 204);
-        cb();
-      });
+    it('should un-follow a user', function() {
+      return github.del('/user/following/node')
+        .then(res => {
+          assert.strictEqual(typeOf(res.body), 'buffer');
+          assert.strictEqual(res.body.toString(), '');
+          assert.strictEqual(res.statusCode, 204);
+        });
     });
   });
 });

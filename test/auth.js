@@ -1,23 +1,24 @@
 'use strict';
 
 require('mocha');
-var assert = require('assert');
-var auth = require('./support/auth');
-var GitHub = require('..');
-var github;
+const assert = require('assert');
+const auth = require('./support/auth');
+const GitHub = require('..');
+let github;
 
 describe('authentication', function() {
-  beforeEach(function() {
-    github = new GitHub(auth);
+  this.timeout(5000);
+
+  beforeEach(() => (github = new GitHub(auth)));
+
+  it('should authenticate with username and password', function() {
+    return github.get('/gists').then(res => assert(res.body.length > 0));
   });
 
-  it('should authenticate with username and password', function(cb) {
-    this.timeout(5000);
-
-    var github = new GitHub(auth);
-    github.get('/gists', function(err, data) {
+  it('should take a callback', function(cb) {
+    github.get('/gists', function(err, res) {
       if (err) return cb(err);
-      assert(data.length > 0);
+      assert(res.body.length > 0);
       cb();
     });
   });

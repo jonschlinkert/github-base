@@ -1,93 +1,63 @@
 'use strict';
 
 require('mocha');
-var assert = require('assert');
-var auth = require('./support/auth');
-var GitHub = require('..');
-var github;
+const assert = require('assert');
+const auth = require('./support/auth');
+const GitHub = require('..');
+let github;
 
 describe('.get', function() {
+  this.timeout(5000);
+
+  beforeEach(() => (github = new GitHub(auth)));
+
   describe('authentication', function() {
-    it('should default to `bad credentials` when they are needed', function(cb) {
-      this.timeout(10000);
+    it('should default to `bad credentials` when they are needed', function() {
+      github = new GitHub({ username: 'bad', password: 'credentials' });
 
-      github = new GitHub({username: 'bad', password: 'credentials'});
-      github.get(`/repos/${auth.username}/fooobarbaz`, function(err, actual) {
-        if (err) {
-          cb(err);
-          return;
-        }
+      const expected = {
+        message: 'Bad credentials',
+        documentation_url: 'https://developer.github.com/v3'
+      };
 
-        var expected = {
-          message: 'Bad credentials',
-          documentation_url: 'https://developer.github.com/v3'
-        };
-
-        assert.deepEqual(actual, expected);
-        cb();
-      });
+      return github.get(`/repos/${auth.username}/fooobarbaz`)
+        .then(res => assert(!res))
+        .catch(err => assert.deepEqual(err.res.body, expected));
     });
 
-    it('should get resources when unauthenticated', function(cb) {
-      this.timeout(5000);
+    it('should get resources when unauthenticated', function() {
+      github = new GitHub({ repo: 'jonschlinkert/github-base' });
 
-      // unauthenticated
-      var github = new GitHub();
-
-      github.get('/repos/:repo/contributors', {
-        repo: 'jonschlinkert/github-base'
-      }, function(err, data) {
-        if (err) return cb(err);
-        assert.strictEqual(data.length > 0, true);
-        cb();
-      });
+      return github.get('/repos/:repo/contributors')
+        .then(res => assert.strictEqual(res.body.length > 0, true));
     });
   });
 
-  describe('data', function() {
-    it('should pass placeholders for `path` in constructor options', function(cb) {
-      this.timeout(5000);
-
-      var github = new GitHub({
-        username: auth.username,
-        password: auth.password,
-        owner: 'jonschlinkert'
-      });
-
-      github.get('/users/:owner/gists', function(err, data) {
-        if (err) return cb(err);
-        assert(data.length > 5);
-        cb();
-      });
+  describe('options', function() {
+    it('should use constructor options to resolve placeholder values in URL', function() {
+      github = new GitHub({ ...auth, owner: 'jonschlinkert' });
+      return github.get('/users/:owner/gists')
+        .then(res => assert(res.body.length > 5));
     });
 
-    it('should pass placeholders for `path` in `data`', function(cb) {
-      this.timeout(5000);
-
-      github = new GitHub(auth);
-      github.get('/users/:owner/gists', {
-        owner: auth.username,
-      }, function(err, data) {
-        if (err) return cb(err);
-        assert(data.length > 10);
-        cb();
-      });
+    it('should use instance options to resolve placeholder values in URL', function() {
+      github.options.owner = 'jonschlinkert';
+      return github.get('/users/:owner/gists')
+        .then(res => assert(res.body.length > 5));
     });
 
-    it('should merge `options` and `data`', function(cb) {
-      this.timeout(5000);
+    it('should use method options to resolve placeholder values in URL', function() {
+      return github.get('/users/:owner/gists', { owner: auth.username })
+        .then(res => assert(res.body.length > 10));
+    });
 
-      github = new GitHub(auth);
-      github.get('/repos/:owner/:repo', {
-        owner: 'jonschlinkert',
-        repo: 'github-base'
-      }, function(err, data) {
-        if (err) return cb(err);
-        assert(data);
-        assert.strictEqual(typeof data, 'object');
-        assert.strictEqual(data.name, 'github-base');
-        cb();
-      });
+    it('should merge constructor and method options', function() {
+      return github.get('/repos/:owner/:repo', { owner: 'jonschlinkert', repo: 'github-base' })
+        .then(res => {
+          assert(res);
+          assert(res.body);
+          assert.strictEqual(res.body.name, 'github-base');
+        });
     });
   });
 });
