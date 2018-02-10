@@ -71,7 +71,12 @@
         "gists",
         "github-contributors"
       ]
-    }
+    },
+    "reflinks": [
+      "needle",
+      "qs",
+      "use"
+    ]
   },
   "lintDeps": {
     "devDependencies": {

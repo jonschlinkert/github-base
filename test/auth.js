@@ -11,6 +11,19 @@ describe('authentication', function() {
 
   beforeEach(() => (github = new GitHub(auth)));
 
+  it('should throw an error when bad credentials are provided', function() {
+    github = new GitHub({ username: 'bad', password: 'credentials' });
+
+    const expected = {
+      message: 'Bad credentials',
+      documentation_url: 'https://developer.github.com/v3'
+    };
+
+    return github.get('/repos/doowb/fooobarbaz')
+      .then(res => assert(!res))
+      .catch(err => assert.deepEqual(err.res.body, expected));
+  });
+
   it('should authenticate with username and password', function() {
     return github.get('/gists').then(res => assert(res.body.length > 0));
   });

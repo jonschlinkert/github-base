@@ -8,7 +8,7 @@ const utils = require('./lib/utils');
  *
  * ```js
  * const GitHub = require('github-base');
- * const github = new GitHub(options);
+ * const github = new GitHub([options]);
  * ```
  * @name GitHub
  * @param {Object} `options`
@@ -23,26 +23,21 @@ class GitHub {
   }
 
   /**
-   * Uses [needle][] to make a request to the GitHub API with the provided settings.
-   * Supports any of the GitHub API VERBs:
-   *
-   *   - `GET`
-   *   - `PUT`
-   *   - `POST`
-   *   - `PATCH`
-   *   - `DELETE`
+   * Uses [needle][] to make a request to the GitHub API. Supports the following verbs:
+   * `GET`, `PUT`, `POST`, `PATCH`, and `DELETE`. Takes a callback or returns a promise.
    *
    * ```js
-   * //example..request
-   * github.request('GET', '/user/orgs', function (err, res) {
-   *   //=> array of orgs
-   * });
+   * // list all orgs for the authenticated user
+   * const auth = require('./local-private-auth-info');
+   * const github = new GitHub(auth);
+   * github.request('GET', '/user/orgs')
+   *   .then(res => console.log(res.body));
    * ```
    * @name .request
    * @param  {String} `method` The http VERB to use
-   * @param  {String} `url` GitHub API URL to use.
-   * @param  {Options} `options` Request options.
-   * @param  {Function} `callback`
+   * @param  {String} `path` The path to append to the base GitHub API URL.
+   * @param  {Options} `options` Request [options](#options).
+   * @param  {Function} `callback` If a callback is not passed, a promise will be returned.
    * @api public
    */
 
@@ -56,24 +51,21 @@ class GitHub {
   }
 
   /**
-   * Makes a single `GET` request to the GitHub API based on the
-   * provided settings.
+   * Make a `GET` request to the GitHub API.
    *
    * ```js
-   * // get orgs for the authenticated user
-   * github.get('/user/orgs', function (err, res) {
-   *   //=> array of orgs
-   * });
+   * // get a list of orgs for the authenticated user
+   * github.get('/user/orgs')
+   *   .then(res => console.log(res.body));
    *
    * // get gists for the authenticated user
-   * github.get('/gists', function (err, res) {
-   *   //=> array of gists
-   * });
+   * github.get('/gists')
+   *   .then(res => console.log(res.body));
    * ```
    * @name .get
-   * @param  {String} `path` path to append to the GitHub API URL.
-   * @param  {Options} `options` Request options.
-   * @param  {Function} `callback`
+   * @param  {String} `path` The path to append to the base GitHub API URL.
+   * @param  {Options} `options` Request [options](#options).
+   * @param  {Function} `callback` If a callback is not passed, a promise will be returned.
    * @api public
    */
 
@@ -82,19 +74,19 @@ class GitHub {
   }
 
   /**
-   * Makes a single `DELETE` request to the GitHub API based on the
-   * provided settings.
+   * Make a `DELETE` request to the GitHub API.
    *
    * ```js
    * // un-follow someone
-   * github.del('/user/following/someoneelse', function(err, res) {
-   *   console.log(res);
-   * });
+   * github.del('/user/following/:some_username', { some_username: 'whatever' })
+   *   .then(() => {
+   *     // do something else
+   *   });
    * ```
    * @name .del
-   * @param  {String} `path` path to append to the GitHub API URL.
-   * @param  {Options} `options` Request options.
-   * @param  {Function} `callback`
+   * @param  {String} `path` The path to append to the base GitHub API URL.
+   * @param  {Options} `options` Request [options](#options).
+   * @param  {Function} `callback` If a callback is not passed, a promise will be returned.
    * @api public
    */
 
@@ -103,21 +95,21 @@ class GitHub {
   }
 
   /**
-   * Makes a single `PATCH` request to the GitHub API based on the
-   * provided settings.
+   * Make a `PATCH` request to the GitHub API.
    *
    * ```js
    * // update a gist
    * const fs = require('fs');
-   * const opts = {files: {'readme.md': { content: '# My Readme...' }}};
-   * github.patch('/gists/bd139161a425896f35f8', opts, function(err, res) {
-   *   console.log(err, res);
-   * });
+   * const options = { files: { 'readme.md': { content: fs.readFileSync('README.md', 'utf8') } } };
+   * github.patch('/gists/bd139161a425896f35f8', options)
+   *   .then(() => {
+   *     // do something else
+   *   });
    * ```
    * @name .patch
-   * @param  {String} `path` path to append to the GitHub API URL.
-   * @param  {Options} `options` Request options.
-   * @param  {Function} `callback`
+   * @param  {String} `path` The path to append to the base GitHub API URL.
+   * @param  {Options} `options` Request [options](#options).
+   * @param  {Function} `callback` If a callback is not passed, a promise will be returned.
    * @api public
    */
 
@@ -126,20 +118,19 @@ class GitHub {
   }
 
   /**
-   * Makes a single `POST` request to the GitHub API based on the
-   * provided settings.
+   * Make a `POST` request to the GitHub API.
    *
    * ```js
-   * // create a new repo
-   * const opts = { name:  'new-repo-name' };
-   * github.post('/user/repos', opts, function(err, res) {
-   *   console.log(res);
-   * });
+   * // create a new repository
+   * github.post('/user/repos', { name: 'new-repo-name' })
+   *   .then(() => {
+   *     // do something else
+   *   });
    * ```
    * @name .post
-   * @param  {String} `path` path to append to the GitHub API URL.
-   * @param  {Options} `options` Request options.
-   * @param  {Function} `callback`
+   * @param  {String} `path` The path to append to the base GitHub API URL.
+   * @param  {Options} `options` Request [options](#options).
+   * @param  {Function} `callback` If a callback is not passed, a promise will be returned.
    * @api public
    */
 
@@ -148,19 +139,19 @@ class GitHub {
   }
 
   /**
-   * Makes a single `PUT` request to the GitHub API based on the provided
-   * settings.
+   * Make a `PUT` request to the GitHub API.
    *
    * ```js
    * // follow someone
-   * github.put('/user/following/jonschlinkert', function(err, res) {
-   *   console.log(res);
-   * });
+   * github.put('/user/following/jonschlinkert')
+   *   .then(() => {
+   *     // do something else
+   *   });
    * ```
    * @name .put
-   * @param  {String} `path` path to append to the GitHub API URL.
-   * @param  {Options} `options` Request options.
-   * @param  {Function} `callback`
+   * @param  {String} `path` The path to append to the base GitHub API URL.
+   * @param  {Options} `options` Request [options](#options).
+   * @param  {Function} `callback` If a callback is not passed, a promise will be returned.
    * @api public
    */
 
@@ -169,7 +160,7 @@ class GitHub {
   }
 
   /**
-   * Recursively get all pages for a GET request.
+   * Recursively make GET requests until all pages of records are returned.
    *
    * ```js
    * // get all repos for the authenticated user
@@ -178,8 +169,9 @@ class GitHub {
    *   .catch(console.error)
    * ```
    * @name .paged
-   * @param  {String} `path` path to append to the GitHub API URL.
-   * @param  {Function} `callback`
+   * @param  {String} `path` The path to append to the base GitHub API URL.
+   * @param  {Options} `options` Request [options](#options).
+   * @param  {Function} `callback` If a callback is not passed, a promise will be returned.
    * @api public
    */
 
