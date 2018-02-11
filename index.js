@@ -78,19 +78,19 @@ class GitHub {
    *
    * ```js
    * // un-follow someone
-   * github.del('/user/following/:some_username', { some_username: 'whatever' })
+   * github.delete('/user/following/:some_username', { some_username: 'whatever' })
    *   .then(() => {
    *     // do something else
    *   });
    * ```
-   * @name .del
+   * @name .delete
    * @param  {String} `path` The path to append to the base GitHub API URL.
    * @param  {Options} `options` Request [options](#options).
    * @param  {Function} `callback` If a callback is not passed, a promise will be returned.
    * @api public
    */
 
-  del(path, options, callback) {
+  delete(path, options, callback) {
     return this.request('DELETE', path, options, callback);
   }
 
