@@ -2,12 +2,8 @@
 environment:
   matrix:
     # node.js
-    - nodejs_version: "7.0"
-    - nodejs_version: "6.0"
-    - nodejs_version: "5.0"
-    - nodejs_version: "4.0"
-    - nodejs_version: "0.12"
-    - nodejs_version: "0.10"
+    - nodejs_version: "9.0"
+    - nodejs_version: "8.0"
 
   # dev auth
   GITHUB_USERNAME:
@@ -17,7 +13,7 @@ environment:
 
 # Install scripts. (runs after repo cloning)
 install:
-  # Get the latest stable version of Node.js or io.js
+  # Get the latest stable version of Node.js
   - ps: Install-Product node $env:nodejs_version
   # install modules
   - npm install

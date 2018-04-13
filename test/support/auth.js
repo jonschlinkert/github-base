@@ -7,9 +7,10 @@ var store = new Store('github-base-tests');
 var auth = store.get('auth');
 
 if (!auth) {
-  auth = {};
-  auth.username = argv.username || argv._[0] || process.env.GITHUB_USERNAME;
-  auth.password = argv.password || argv._[1] || process.env.GITHUB_PASSWORD;
+  auth = {
+    username: argv.username || argv._[0] || process.env.GITHUB_USERNAME,
+    password: argv.password || argv._[1] || process.env.GITHUB_PASSWORD
+  };
 }
 
 if (isString(auth.username) && isString(auth.password)) {

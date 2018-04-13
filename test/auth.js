@@ -14,14 +14,11 @@ describe('authentication', function() {
   it('should throw an error when bad credentials are provided', function() {
     github = new GitHub({ username: 'bad', password: 'credentials' });
 
-    const expected = {
-      message: 'Bad credentials',
-      documentation_url: 'https://developer.github.com/v3'
-    };
-
     return github.get('/repos/doowb/fooobarbaz')
       .then(res => assert(!res))
-      .catch(err => assert.deepEqual(err.res.body, expected));
+      .catch(err => {
+        assert.deepEqual(err.message, 'Bad credentials');
+      });
   });
 
   it('should authenticate with username and password', function() {

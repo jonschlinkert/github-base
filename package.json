@@ -1,6 +1,6 @@
 {
   "name": "github-base",
-  "description": "JavaScript wrapper that greatly simplifies working with GitHub's API.",
+  "description": "Low-level methods for working with the GitHub API in node.js/JavaScript.",
   "version": "0.5.4",
   "homepage": "https://github.com/jonschlinkert/github-base",
   "author": "Jon Schlinkert (https://github.com/jonschlinkert)",
@@ -27,13 +27,14 @@
   },
   "dependencies": {
     "arr-union": "^3.1.0",
-    "clone-deep": "^3.0.1",
-    "get-value": "^3.0.0",
-    "has-value": "^2.0.1",
-    "needle": "^2.1.1",
+    "clone-deep": "^4.0.0",
+    "get-value": "^3.0.1",
+    "has-value": "^2.0.2",
+    "needle": "^2.2.0",
     "object.omit": "^3.0.0",
     "paged-request": "^1.0.2",
     "parse-link-header": "^1.0.1",
+    "qs": "^6.5.1",
     "use": "^3.1.0"
   },
   "devDependencies": {
@@ -67,8 +68,9 @@
     ],
     "related": {
       "list": [
-        "ask-for-github-auth",
         "gists",
+        "repos",
+        "topics",
         "github-contributors"
       ]
     },
@@ -77,14 +79,5 @@
       "qs",
       "use"
     ]
-  },
-  "lintDeps": {
-    "devDependencies": {
-      "files": {
-        "patterns": [
-          "paged.js"
-        ]
-      }
-    }
   }
 }

@@ -16,7 +16,7 @@ const utils = require('./lib/utils');
  */
 
 class GitHub {
-  constructor(options) {
+  constructor(options = {}) {
     this.options = options;
     this.defaults = utils.defaults(this.options);
     use(this);
@@ -175,12 +175,19 @@ class GitHub {
    * @api public
    */
 
-  paged(path, options, callback) {
+  paged(path, options, next, callback) {
     if (typeof options === 'function') {
-      callback = options;
+      callback = next;
+      next = options;
       options = null;
     }
-    const opts = Object.assign({}, this.options, options);
+
+    if (typeof callback !== 'function') {
+      callback = next;
+      next = null;
+    }
+
+    const opts = Object.assign({ next: next }, this.options, options);
     return utils.paged('GET', path, opts, callback);
   }
 }
