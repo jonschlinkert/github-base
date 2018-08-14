@@ -1,7 +1,7 @@
 {
   "name": "github-base",
   "description": "Low-level methods for working with the GitHub API in node.js/JavaScript.",
-  "version": "0.5.4",
+  "version": "1.0.0",
   "homepage": "https://github.com/jonschlinkert/github-base",
   "author": "Jon Schlinkert (https://github.com/jonschlinkert)",
   "contributors": [
@@ -56,6 +56,12 @@
   ],
   "verb": {
     "layout": "default",
+    "toc": {
+      "render": true,
+      "method": "preWrite",
+      "collapsible": true,
+      "maxdepth": 4
+    },
     "tasks": [
       "readme"
     ],
