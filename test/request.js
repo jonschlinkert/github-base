@@ -13,8 +13,8 @@ describe('.request', function() {
 
   describe('PATCH /gists', function() {
     it('should PATCH gist description', function() {
-      return github.request('PATCH', '/gists/:id', {
-        id: 'f2bfab45b8eeca457b10b09cc07251bd',
+      let id = 'f2bfab45b8eeca457b10b09cc07251bd';
+      return github.request('PATCH', `/gists/${id}`, {
         description: JSON.stringify('gist update test ' + new Date())
       })
         .then(res => {
@@ -26,7 +26,7 @@ describe('.request', function() {
 
     describe('GET /gists', function() {
       it('should GET a gist', function() {
-        return github.request('GET', '/gists/:id', { id: 'f2bfab45b8eeca457b10b09cc07251bd' })
+        return github.request('GET', '/gists/f2bfab45b8eeca457b10b09cc07251bd')
           .then(res => {
             assert.strictEqual(res.body.id, 'f2bfab45b8eeca457b10b09cc07251bd');
             assert(res.body.url.includes('https://api.github.com/gists/f2bfab45b8eeca457b10b09cc07251bd'));
@@ -37,9 +37,7 @@ describe('.request', function() {
 
     describe('PUT /repos', function() {
       it('should unsubscribe from repo with PUT', function() {
-        return github.request('PUT', '/repos/:owner/:repo/subscription', {
-          owner: 'jonschlinkert',
-          repo: 'github-base',
+        return github.request('PUT', '/repos/jonschlinkert/github-base/subscription', {
           subscribed: false,
           ignored: true
         })

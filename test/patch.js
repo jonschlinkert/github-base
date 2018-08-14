@@ -11,8 +11,8 @@ describe('.patch', function() {
 
   beforeEach(() => (github = new GitHub(auth)));
 
-  it('should PATCH an issue', function() {
-    return github.patch('/repos/:owner/:repo/issues/:number', {
+  it('should PATCH an issue', () =>{
+    let opts = {
       owner: 'jonschlinkert',
       repo: 'github-base',
       number: 14,
@@ -20,8 +20,10 @@ describe('.patch', function() {
       body: 'this is a test',
       assignees: ['jonschlinkert'],
       state: 'closed'
-    })
-      .then(function(res) {
+    };
+
+    return github.patch(`/repos/${opts.owner}/${opts.repo}/issues/${opts.number}`, )
+      .then((res) => {
         assert.strictEqual(res.body.number, 14);
         assert.strictEqual(res.body.title, 'issue-api-test');
       });

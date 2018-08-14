@@ -31,9 +31,9 @@ From v1.0 forward, changelog entries are classified using the following labels _
 
 </details>
 
-## [1.0.0] - 2017-04-19
+## [1.0.0] - 2018-08-14
 
-### Changed
+**Changed**
 
 - refactored to use es6 class, updated examples and docs.
 - renamed `.del` to `.delete`

@@ -26,23 +26,19 @@
     "test": "mocha"
   },
   "dependencies": {
-    "arr-union": "^3.1.0",
-    "clone-deep": "^4.0.0",
     "get-value": "^3.0.1",
-    "has-value": "^2.0.2",
-    "needle": "^2.2.0",
-    "object.omit": "^3.0.0",
+    "needle": "^2.2.2",
     "paged-request": "^1.0.2",
     "parse-link-header": "^1.0.1",
     "qs": "^6.5.1",
     "use": "^3.1.0"
   },
   "devDependencies": {
-    "data-store": "^1.0.0",
-    "gulp-format-md": "^1.0.0",
-    "kind-of": "^6.0.2",
     "minimist": "^1.2.0",
-    "mocha": "^3.5.3"
+    "data-store": "^1.0.0",
+    "mocha": "^3.5.3",
+    "kind-of": "^6.0.2",
+    "gulp-format-md": "^1.0.0"
   },
   "keywords": [
     "api",

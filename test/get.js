@@ -4,6 +4,7 @@ require('mocha');
 const assert = require('assert');
 const auth = require('./support/auth');
 const GitHub = require('..');
+let org = 'jonschlinkert/github-base';
 let github;
 
 describe('.get', function() {
@@ -12,16 +13,14 @@ describe('.get', function() {
   beforeEach(() => (github = new GitHub(auth)));
 
   it('should get resources when authenticated', function() {
-    github.options.foo = 'jonschlinkert/github-base';
-
-    return github.get('/repos/:foo/contributors')
+    return github.get(`/repos/${org}/contributors`)
       .then(res => assert.strictEqual(res.body.length > 0, true));
   });
 
   it('should get resources when unauthenticated', function() {
-    github = new GitHub({ foo: 'jonschlinkert/github-base' });
+    github = new GitHub();
 
-    return github.get('/repos/:foo/contributors')
+    return github.get(`/repos/${org}/contributors`)
       .then(res => assert.strictEqual(res.body.length > 0, true));
   });
 });

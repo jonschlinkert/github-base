@@ -18,7 +18,6 @@ const utils = require('./lib/utils');
 class GitHub {
   constructor(options = {}) {
     this.options = options;
-    this.defaults = utils.defaults(this.options);
     use(this);
   }
 
@@ -37,17 +36,11 @@ class GitHub {
    * @param  {String} `method` The http VERB to use
    * @param  {String} `path` The path to append to the base GitHub API URL.
    * @param  {Options} `options` Request [options](#options).
-   * @param  {Function} `callback` If a callback is not passed, a promise will be returned.
    * @api public
    */
 
-  request(method, path, options, callback) {
-    if (typeof options === 'function') {
-      callback = options;
-      options = null;
-    }
-    const opts = Object.assign({}, this.options, options);
-    return utils.request(method, path, opts, callback);
+  request(method, path, options) {
+    return utils.request(method, path, { ...this.options, ...options });
   }
 
   /**
@@ -65,12 +58,11 @@ class GitHub {
    * @name .get
    * @param  {String} `path` The path to append to the base GitHub API URL.
    * @param  {Options} `options` Request [options](#options).
-   * @param  {Function} `callback` If a callback is not passed, a promise will be returned.
    * @api public
    */
 
-  get(path, options, callback) {
-    return this.request('GET', path, options, callback);
+  get(path, options) {
+    return this.request('GET', path, options);
   }
 
   /**
@@ -79,19 +71,18 @@ class GitHub {
    * ```js
    * // un-follow someone
    * github.delete('/user/following/:some_username', { some_username: 'whatever' })
-   *   .then(() => {
-   *     // do something else
+   *   .then(res => {
+   *     console.log('RESPONSE:', res);
    *   });
    * ```
    * @name .delete
    * @param  {String} `path` The path to append to the base GitHub API URL.
    * @param  {Options} `options` Request [options](#options).
-   * @param  {Function} `callback` If a callback is not passed, a promise will be returned.
    * @api public
    */
 
-  delete(path, options, callback) {
-    return this.request('DELETE', path, options, callback);
+  delete(path, options) {
+    return this.request('DELETE', path, options);
   }
 
   /**
@@ -102,19 +93,18 @@ class GitHub {
    * const fs = require('fs');
    * const options = { files: { 'readme.md': { content: fs.readFileSync('README.md', 'utf8') } } };
    * github.patch('/gists/bd139161a425896f35f8', options)
-   *   .then(() => {
-   *     // do something else
+   *   .then(res => {
+   *     console.log('RESPONSE:', res);
    *   });
    * ```
    * @name .patch
    * @param  {String} `path` The path to append to the base GitHub API URL.
    * @param  {Options} `options` Request [options](#options).
-   * @param  {Function} `callback` If a callback is not passed, a promise will be returned.
    * @api public
    */
 
-  patch(path, options, callback) {
-    return this.request('PATCH', path, options, callback);
+  patch(path, options) {
+    return this.request('PATCH', path, options);
   }
 
   /**
@@ -123,19 +113,18 @@ class GitHub {
    * ```js
    * // create a new repository
    * github.post('/user/repos', { name: 'new-repo-name' })
-   *   .then(() => {
-   *     // do something else
+   *   .then(res => {
+   *     console.log('RESPONSE:', res);
    *   });
    * ```
    * @name .post
    * @param  {String} `path` The path to append to the base GitHub API URL.
    * @param  {Options} `options` Request [options](#options).
-   * @param  {Function} `callback` If a callback is not passed, a promise will be returned.
    * @api public
    */
 
-  post(path, options, callback) {
-    return this.request('POST', path, options, callback);
+  post(path, options) {
+    return this.request('POST', path, options);
   }
 
   /**
@@ -144,19 +133,18 @@ class GitHub {
    * ```js
    * // follow someone
    * github.put('/user/following/jonschlinkert')
-   *   .then(() => {
-   *     // do something else
+   *   .then(res => {
+   *     console.log('RESPONSE:', res);
    *   });
    * ```
    * @name .put
    * @param  {String} `path` The path to append to the base GitHub API URL.
    * @param  {Options} `options` Request [options](#options).
-   * @param  {Function} `callback` If a callback is not passed, a promise will be returned.
    * @api public
    */
 
-  put(path, options, callback) {
-    return this.request('PUT', path, options, callback);
+  put(path, options) {
+    return this.request('PUT', path, options);
   }
 
   /**
@@ -171,24 +159,15 @@ class GitHub {
    * @name .paged
    * @param  {String} `path` The path to append to the base GitHub API URL.
    * @param  {Options} `options` Request [options](#options).
-   * @param  {Function} `callback` If a callback is not passed, a promise will be returned.
    * @api public
    */
 
-  paged(path, options, next, callback) {
+  paged(path, options, next) {
     if (typeof options === 'function') {
-      callback = next;
       next = options;
       options = null;
     }
-
-    if (typeof callback !== 'function') {
-      callback = next;
-      next = null;
-    }
-
-    const opts = Object.assign({ next: next }, this.options, options);
-    return utils.paged('GET', path, opts, callback);
+    return utils.paged('GET', path, { ...this.options, ...options, next });
   }
 }
 

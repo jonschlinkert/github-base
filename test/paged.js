@@ -4,6 +4,7 @@ require('mocha');
 const assert = require('assert');
 const auth = require('./support/auth');
 const GitHub = require('..');
+let username = 'doowb';
 let github;
 
 describe('.paged', function() {
@@ -13,7 +14,7 @@ describe('.paged', function() {
 
   describe('.paged /users/:user/gists', function() {
     it('should get all gists for the given user', function() {
-      return github.paged('/users/:owner/gists', { owner: 'doowb' })
+      return github.paged(`/users/${username}/gists`)
         .then(res => {
           assert(res.pages[0].body.length > 30);
 
@@ -25,7 +26,7 @@ describe('.paged', function() {
     });
 
     it('should set the per_page limit using a query string', function() {
-      return github.paged('/users/:owner/gists?per_page=30', { owner: 'doowb' })
+      return github.paged(`/users/${username}/gists?per_page=30`)
         .then(res => {
           assert.equal(res.pages[0].body.length, 30);
 
@@ -37,7 +38,7 @@ describe('.paged', function() {
     });
 
     it('should set the per_page limit using options', function() {
-      return github.paged('/users/:owner/gists', { owner: 'doowb', query: { per_page: 30 } })
+      return github.paged(`/users/${username}/gists`, { query: { per_page: 30 } })
         .then(res => {
           assert.equal(res.pages[0].body.length, 30);
 
