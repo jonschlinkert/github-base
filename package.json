@@ -26,6 +26,7 @@
     "test": "mocha"
   },
   "dependencies": {
+    "axios": "^0.18.0",
     "get-value": "^3.0.1",
     "needle": "^2.2.2",
     "paged-request": "^1.0.2",
