@@ -17,12 +17,12 @@ describe('.patch', function() {
       repo: 'github-base',
       number: 14,
       title: 'issue-api-test',
-      body: 'this is a test',
+      body: `this is a test ${+(new Date())}`,
       assignees: ['jonschlinkert'],
       state: 'closed'
     };
 
-    return github.patch(`/repos/${opts.owner}/${opts.repo}/issues/${opts.number}`, )
+    return github.patch(`/repos/${opts.owner}/${opts.repo}/issues/${opts.number}`, opts)
       .then((res) => {
         assert.strictEqual(res.body.number, 14);
         assert.strictEqual(res.body.title, 'issue-api-test');
