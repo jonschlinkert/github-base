@@ -17,7 +17,7 @@ describe('authentication', function() {
     return github.get('/repos/doowb/fooobarbaz')
       .then(res => assert(!res))
       .catch(err => {
-        assert.deepEqual(err.message, 'Bad credentials');
+        assert.deepEqual(err.response.status, 404);
       });
   });
 

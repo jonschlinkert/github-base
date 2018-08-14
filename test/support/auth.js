@@ -1,6 +1,6 @@
 'use strict';
 
-var opts = {alias: {password: 'p', username: 'u'}};
+var opts = { alias: { password: 'p', username: 'u' } };
 var argv = require('minimist')(process.argv.slice(2), opts);
 var Store = require('data-store');
 var store = new Store('github-base-tests');
