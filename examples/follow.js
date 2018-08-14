@@ -1,7 +1,7 @@
-var GitHub = require('..');
-var github = new GitHub(require('./auth'));
+const GitHub = require('..');
+const github = new GitHub(require('./auth'));
 
-github.put('/user/following/jonschlinkert', function(err, res) {
-  if (err) return console.error(err);
-  console.log(res);
-});
+// follow a user
+github.put('/user/following/jonschlinkert')
+  .then(res => console.log(res))
+  .catch(console.error);

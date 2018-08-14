@@ -1,52 +1,38 @@
 'use strict';
 
 require('mocha');
-var assert = require('assert');
-var auth = require('./support/auth');
-var GitHub = require('..');
-var github;
+const assert = require('assert');
+const auth = require('./support/auth');
+const GitHub = require('..');
+let github;
 
 describe('.post', function() {
-  describe('POST /markdown and /markdown/raw', function() {
-    beforeEach(function() {
-      github = new GitHub(auth);
-    });
+  this.timeout(10000);
 
-    it('should work with `/markdown` endpoint', function(cb) {
-      this.timeout(10000);
+  beforeEach(() => (github = new GitHub(auth)));
 
-      github.post('/markdown', {
-        json: false,
-        text: 'foo **bar** baz!',
+  describe('should POST /markdown', function() {
+    it('should work with `/markdown` endpoint', function() {
+      const options = {
+        text: 'foo **bar**\n```js\nvar foo = "bar";\n```\nbaz!',
         mode: 'gfm',
         headers: {
           'content-type': 'application/json'
         }
-      }, function(err, data, stream) {
-        if (err) return cb(err);
-        assert(data.indexOf(`https://github.com/${auth.username}`));
-        assert.strictEqual(stream.statusCode, 200);
-        cb();
-      });
+      };
+
+      const expected = `<p>foo <strong>bar</strong></p>
+<div class="highlight highlight-source-js"><pre><span class="pl-k">var</span> foo <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">"</span>bar<span class="pl-pds">"</span></span>;</pre></div>
+<p>baz!</p>`;
+
+      return github.post('/markdown', options).then(res => assert.strictEqual(res.body, expected));
     });
 
-    it('should pass raw body to `/markdown/raw`', function(cb) {
-      this.timeout(5000);
+    it('should POST /markdown/raw', function() {
+      const options = { body: 'foo **bar** #1', headers: { 'content-type': 'text/plain' } };
 
-      GitHub({
-        json: false,
-        username: auth.username,
-        password: auth.password,
-        body: 'foo **bar** #1',
-        headers: {
-          'content-type': 'text/plain'
-        }
-      })
-      .post('/markdown/raw', function(err, data) {
-        if (err) return cb(err);
-        assert.strictEqual(String(data), '<p>foo <strong>bar</strong> #1</p>\n');
-        cb();
-      });
+      return github.post('/markdown/raw', options)
+        .then(res => assert.strictEqual(res.body.toString(), '<p>foo <strong>bar</strong> #1</p>\n'));
     });
   });
 });

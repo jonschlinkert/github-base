@@ -1,26 +1,24 @@
 'use strict';
 
 require('mocha');
-var assert = require('assert');
-var auth = require('./support/auth');
-var GitHub = require('..');
-var github;
+const assert = require('assert');
+const GitHub = require('..');
 
 describe('API', function() {
-  it('should inherit GitHub with `.extend`', function(cb) {
-    function Foo () {
-      GitHub.call(this);
+  it('should extend GitHub class', function(cb) {
+    class Foo extends GitHub {
+      whatever() {}
     }
 
-    GitHub.extend(Foo);
     assert.strictEqual(typeof Foo.prototype.get, 'function');
     assert.strictEqual(typeof Foo.prototype.put, 'function');
+    assert.strictEqual(typeof Foo.prototype.whatever, 'function');
     cb();
   });
 
-  it('should support plugins', function(cb) {
-    var github = new GitHub();
-    var count = 0;
+  it('should call plugins', function() {
+    const github = new GitHub();
+    let count = 0;
 
     github.a = 'b';
     github.use(function() {
@@ -28,7 +26,6 @@ describe('API', function() {
       assert(this.a, 'b');
     });
 
-    assert.equal(count, 1);
-    cb();
+    assert.strictEqual(count, 1);
   });
 });

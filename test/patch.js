@@ -1,30 +1,31 @@
 'use strict';
 
 require('mocha');
-var assert = require('assert');
-var auth = require('./support/auth');
-var GitHub = require('..');
-var github;
+const assert = require('assert');
+const auth = require('./support/auth');
+const GitHub = require('..');
+let github;
 
 describe('.patch', function() {
-  beforeEach(function() {
-    github = new GitHub(auth);
-  });
+  this.timeout(5000);
 
-  it('should edit an issue', function(cb) {
-    this.timeout(5000);
+  beforeEach(() => (github = new GitHub(auth)));
 
-    github.patch('/repos/:owner/:repo/issues/:number', {
+  it('should PATCH an issue', () =>{
+    let opts = {
       owner: 'jonschlinkert',
       repo: 'github-base',
       number: 14,
       title: 'issue-api-test',
-      body: 'this is a test'
-    }, function(err, data, stream) {
-      if (err) return cb(err);
-      assert.strictEqual(data.number, 14);
-      assert.strictEqual(data.title, 'issue-api-test');
-      cb();
-    });
+      body: 'this is a test',
+      assignees: ['jonschlinkert'],
+      state: 'closed'
+    };
+
+    return github.patch(`/repos/${opts.owner}/${opts.repo}/issues/${opts.number}`, )
+      .then((res) => {
+        assert.strictEqual(res.body.number, 14);
+        assert.strictEqual(res.body.title, 'issue-api-test');
+      });
   });
 });
